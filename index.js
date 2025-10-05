@@ -28,8 +28,16 @@ const pool = mysql.createPool({
     }
 })();
 
-const API1 = require('./API/API1');
-app.use('/api1', API1(pool));
+// Conventional Gets
+const conventionalGets = require('./apis/conventional-gets/base-modules');
+const routes = conventionalGets(pool);
+
+console.log(`Loading Conventional Gets...`);
+for (const [key, router] of Object.entries(routes)) {
+    app.use(`/${key}`, router);
+    console.log(`* Loaded route: /${key}`);
+}
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
