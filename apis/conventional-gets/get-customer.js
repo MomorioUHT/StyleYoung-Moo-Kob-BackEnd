@@ -14,7 +14,7 @@ module.exports = (pool) => {
                     c_id,
                     c_firstname,
                     c_lastname,
-                    c_tel
+                    c_tel,
                     c_address,
                     c_username,
                     c_lastlogin 

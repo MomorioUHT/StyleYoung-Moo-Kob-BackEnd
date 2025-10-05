@@ -11,7 +11,7 @@ module.exports = (pool) => {
                     r_id, 
                     r_name, 
                     r_tel, 
-                    r_address, 
+                    r_address
                 FROM RESTAURANT
             `);
 
