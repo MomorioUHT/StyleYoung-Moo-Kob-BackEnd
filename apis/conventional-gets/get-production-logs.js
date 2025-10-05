@@ -22,7 +22,7 @@ module.exports = (pool) => {
             res.json(rows);
         } catch (err) {
             console.error(err);
-            res.status(500).json({ error: 'database error' });
+            res.status(500).json({ message: 'database error' });
         }
     });
 

@@ -6,17 +6,18 @@ module.exports = (pool) => {
 
     router.get('/', validateApiKey, async (req, res) => {
         try {
-            const [rows] = await pool.query(`
-                SELECT 
-                    r_id, 
-                    r_name, 
-                    r_tel, 
-                    r_address
-                FROM RESTAURANT
-            `);
+            const p_id = req.body.p_id;
+
+            const [rows] = await pool.query(
+                `SELECT r.i_id, i.i_name, r.ingre_use_amount
+                FROM RECIPE r
+                JOIN INGREDIENT i ON r.i_id = i.i_id
+                WHERE r.p_id = ?`,
+                [p_id]
+            );
 
             if (rows.length === 0) {
-                return res.status(404).json({ message: 'no any restaurant found' });
+                res.status(404).json({ message: 'no recipe found for that product'})
             }
 
             res.json(rows);

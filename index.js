@@ -38,6 +38,26 @@ for (const [key, router] of Object.entries(routes)) {
     console.log(`* Loaded route: /${key}`);
 }
 
+// Finder Gets
+const finderGets = require('./apis/finder-gets/base-modules');
+const routes2 = finderGets(pool);
+
+console.log(`Loading Finder Gets...`);
+for (const [key, router] of Object.entries(routes2)) {
+    app.use(`/${key}`, router);
+    console.log(`* Loaded route: /${key}`);
+}
+
+// Poster Query
+
+const posterQuery = require('./apis/poster-query/base-modules');
+const routes3 = posterQuery(pool);
+
+console.log(`Loading Poster Query...`);
+for (const [key, router] of Object.entries(routes3)) {
+    app.use(`/${key}`, router);
+    console.log(`* Loaded route: /${key}`);
+}
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
