@@ -39,6 +39,7 @@ for (const [key, router] of Object.entries(routes)) {
 }
 
 // Finder Gets
+console.log("==========")
 const finderGets = require('./apis/finder-gets/base-modules');
 const routes2 = finderGets(pool);
 
@@ -49,7 +50,7 @@ for (const [key, router] of Object.entries(routes2)) {
 }
 
 // Poster Query
-
+console.log("==========")
 const posterQuery = require('./apis/poster-query/base-modules');
 const routes3 = posterQuery(pool);
 
@@ -59,6 +60,18 @@ for (const [key, router] of Object.entries(routes3)) {
     console.log(`* Loaded route: /${key}`);
 }
 
+// Login & Register
+console.log("==========")
+const loginRegister = require('./apis/login-register/base-modules');
+const routes4 = loginRegister(pool);
+
+console.log(`Loading login Register...`);
+for (const [key, router] of Object.entries(routes4)) {
+    app.use(`/${key}`, router);
+    console.log(`* Loaded route: /${key}`);
+}
+
+console.log("==========")
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
