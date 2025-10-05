@@ -12,7 +12,8 @@ module.exports = (pool) => {
             const [rows] = await pool.query(`
                 SELECT 
                     s_id, 
-                    s_name, 
+                    s_firstname,
+                    s_lastname,
                     s_username,
                     s_tel,
                     s_position,
