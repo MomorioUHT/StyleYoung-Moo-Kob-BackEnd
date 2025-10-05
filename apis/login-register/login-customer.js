@@ -16,7 +16,7 @@ module.exports = (pool) => {
             const password = req.body.password;
 
             // Check if username exists
-            const [rows] = await pool.query(`SELECT c_username FROM CUSTOMER WHERE c_username = ?`, [username]);
+            const [rows] = await pool.query(`SELECT c_id, c_username, c_password FROM CUSTOMER WHERE c_username = ?`, [username]);
             if (rows.length === 0) {
                 return res.status(401).json({ error: 'username or password is incorrect' });
             }
@@ -29,8 +29,17 @@ module.exports = (pool) => {
             }
 
             // Creates JWT Secrets
-            const payload = { sub: user.id, username: user.username };
+            const payload = { sub: user.c_id, username: user.c_username };
             const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+
+            // Save token and Login date to DB
+            const [result] = await pool.query(`
+                    UPDATE CUSTOMER
+                    SET c_token = ?, c_lastlogin = NOW()
+                    WHERE c_id = ?
+                `,
+                [token, user.c_id]
+            );
 
             return res.json({ message: 'login successful', token: token });
         } catch (err) {

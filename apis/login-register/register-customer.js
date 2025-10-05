@@ -22,7 +22,7 @@ module.exports = (pool) => {
             const random_id = randomID();
 
             // Check if any duplicates username
-            const [rows] = await pool.query(`SELECT c_username FROM CUSTOMER WHERE username = ?`, [username]);
+            const [rows] = await pool.query(`SELECT c_username FROM CUSTOMER WHERE c_username = ?`, [username]);
             if (rows.length > 0) {
                 res.status(409).json({ message: 'this username already exists'})
             }
