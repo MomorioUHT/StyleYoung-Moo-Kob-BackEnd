@@ -1,26 +1,25 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
+// Momorio's note
+// only ungraded (0) and p_quantity of products will return
+
 module.exports = (pool) => {
     const router = express.Router();
 
     router.get('/', validateApiKey, async (req, res) => {
         try {
-            const p_id = req.body.p_id;
-
-            const [rows] = await pool.query(
-                `SELECT 
-                    r.i_id, 
-                    i.i_name, 
-                    r.ingre_use_amount
-                FROM RECIPE r
-                JOIN INGREDIENT i ON r.i_id = i.i_id
-                WHERE r.p_id = ?`,
-                [p_id]
-            );
+            const [rows] = await pool.query(`
+                SELECT 
+                    p_id, 
+                    p_name, 
+                    p_quantity
+                FROM PRODUCT
+                WHERE p_grade = '0'
+            `);
 
             if (rows.length === 0) {
-                res.status(404).json({ message: 'no recipe found for that product'})
+                return res.status(404).json({ message: 'no any ungraded product' });
             }
 
             res.json(rows);
