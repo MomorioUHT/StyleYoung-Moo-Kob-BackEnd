@@ -5,6 +5,8 @@ const mysql = require('mysql2/promise');
 const app = express();
 const PORT = process.env.PORT;
 
+const cors = require('cors');
+app.use(cors());
 app.use(express.json());
 
 const pool = mysql.createPool({

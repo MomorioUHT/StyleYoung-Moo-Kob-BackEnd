@@ -14,7 +14,7 @@ module.exports = (pool) => {
             const firstname = req.body.firstname;
             const lastname = req.body.lastname;
             const phone = req.body.phone;
-            const address = req.body.address;
+            const position = req.body.position;
             const username = req.body.username;
             const password = req.body.password;
 
@@ -22,7 +22,7 @@ module.exports = (pool) => {
             const random_id = randomID();
 
             // Check if any duplicates username
-            const [rows] = await pool.query(`SELECT c_username FROM CUSTOMER WHERE c_username = ?`, [username]);
+            const [rows] = await pool.query(`SELECT s_username FROM STAFF WHERE s_username = ?`, [username]);
             if (rows.length > 0) {
                 res.status(409).json({ message: 'this username already exists'})
             }
@@ -32,9 +32,9 @@ module.exports = (pool) => {
 
             // Save to database
             const [result] = await pool.query(`
-                INSERT INTO CUSTOMER (c_id, c_firstname, c_lastname, c_tel, c_address, c_username, c_password, c_token, c_lastlogin)
+                INSERT INTO CUSTOMER (s_id, s_firstname, s_lastname, s_tel, s_position, s_username, s_password, s_token, s_lastlogin)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [random_id, firstname, lastname, phone, address, username, hashed_pw, null, null]
+                [random_id, firstname, lastname, phone, position, username, hashed_pw, null, null]
             );
 
             res.status(201).json({ message: 'customer account created successfully'})
