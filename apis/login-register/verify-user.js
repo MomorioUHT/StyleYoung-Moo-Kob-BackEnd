@@ -33,7 +33,7 @@ module.exports = (pool) => {
                         [decoded.sub]
                     ),
                     pool.query(
-                        'SELECT s_id, s_firstname, s_lastname, s_username FROM STAFF WHERE s_id = ?',
+                        'SELECT s_id, s_firstname, s_lastname, s_username, s_position FROM STAFF WHERE s_id = ?',
                         [decoded.sub]
                     )
                 ]);

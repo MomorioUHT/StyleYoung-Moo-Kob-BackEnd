@@ -37,7 +37,7 @@ module.exports = (pool) => {
                 [random_id, firstname, lastname, phone, position, username, hashed_pw, null, null]
             );
 
-            res.status(201).json({ message: 'customer account created successfully'})
+            res.status(201).json({ message: 'staff account created successfully'})
 
         } catch (err) {
             console.error(err);
