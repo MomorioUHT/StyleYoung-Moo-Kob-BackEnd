@@ -32,7 +32,7 @@ module.exports = (pool) => {
 
             // Save to database
             const [result] = await pool.query(`
-                INSERT INTO CUSTOMER (s_id, s_firstname, s_lastname, s_tel, s_position, s_username, s_password, s_token, s_lastlogin)
+                INSERT INTO STAFF (s_id, s_firstname, s_lastname, s_tel, s_position, s_username, s_password, s_token, s_lastlogin)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [random_id, firstname, lastname, phone, position, username, hashed_pw, null, null]
             );
