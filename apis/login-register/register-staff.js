@@ -24,7 +24,7 @@ module.exports = (pool) => {
             // Check if any duplicates username
             const [rows] = await pool.query(`SELECT s_username FROM STAFF WHERE s_username = ?`, [username]);
             if (rows.length > 0) {
-                res.status(409).json({ message: 'this username already exists'})
+                return res.status(409).json({ message: 'this username already exists'})
             }
 
             // Hash password

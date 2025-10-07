@@ -73,6 +73,17 @@ for (const [key, router] of Object.entries(routes4)) {
     console.log(`* Loaded route: /${key}`);
 }
 
+// add-remove items
+console.log("==========")
+const addRemoveItems = require('./apis/add-remove-items/base-modules');
+const routes5 = addRemoveItems(pool);
+
+console.log(`Loading login Register...`);
+for (const [key, router] of Object.entries(routes5)) {
+    app.use(`/${key}`, router);
+    console.log(`* Loaded route: /${key}`);
+}
+
 console.log("==========")
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

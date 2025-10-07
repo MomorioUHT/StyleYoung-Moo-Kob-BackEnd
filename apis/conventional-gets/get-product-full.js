@@ -12,6 +12,7 @@ module.exports = (pool) => {
                     p_name, 
                     p_grade, 
                     p_price, 
+                    p_weight,
                     p_quantity 
                 FROM PRODUCT
             `);
