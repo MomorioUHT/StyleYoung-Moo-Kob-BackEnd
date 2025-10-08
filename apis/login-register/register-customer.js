@@ -18,9 +18,6 @@ module.exports = (pool) => {
             const username = req.body.username;
             const password = req.body.password;
 
-            // Generate an id for that username
-            const random_id = randomID();
-
             // Check if any duplicates username
             const [rows] = await pool.query(`SELECT c_username FROM CUSTOMER WHERE c_username = ?`, [username]);
             if (rows.length > 0) {
@@ -29,7 +26,9 @@ module.exports = (pool) => {
 
             // Hash password
             const hashed_pw = await bcrypt.hash(password ,SALT_ROUNDS)
-
+            // Generate an id for that username
+            const random_id = randomID();
+            
             // Save to database
             const [result] = await pool.query(`
                 INSERT INTO CUSTOMER (c_id, c_firstname, c_lastname, c_tel, c_address, c_username, c_password, c_token, c_lastlogin)

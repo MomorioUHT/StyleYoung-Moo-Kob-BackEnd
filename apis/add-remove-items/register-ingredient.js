@@ -9,15 +9,15 @@ module.exports = (pool) => {
     router.post('/', validateApiKey, async (req, res) => {
         try {
             const ingredient_name = req.body.ingredient_name;
-            
-            // Generate an id for that ingredient
-            const random_id = randomID();
 
             // Check if any duplicate ingredient name
             const [rows] = await pool.query(`SELECT i_name FROM INGREDIENT WHERE i_name = ?`, [ingredient_name]);
             if (rows.length > 0) {
                 return res.status(409).json({ message: 'this ingredient already exists'})
             }
+
+            // Generate an id for that ingredient
+            const random_id = randomID();
 
             // Save to database
             const [result] = await pool.query(`

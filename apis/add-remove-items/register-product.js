@@ -11,15 +11,15 @@ module.exports = (pool) => {
             const product_name = req.body.product_name;
             const product_price = parseFloat(req.body.product_price);
             const product_weight = parseFloat(req.body.product_weight);
-                        
-            // Generate an id for that product
-            const random_id = randomID();
 
             // Check if any duplicate product name
             const [rows] = await pool.query(`SELECT p_name FROM PRODUCT WHERE p_name = ?`, [product_name]);
             if (rows.length > 0) {
                 return res.status(409).json({ message: 'this product already exists'})
             }
+
+            // Generate an id for that product
+            const random_id = randomID();
 
             // Save to database
             const [result] = await pool.query(`
