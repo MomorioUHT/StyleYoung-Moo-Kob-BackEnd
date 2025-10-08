@@ -78,7 +78,7 @@ console.log("==========")
 const addRemoveItems = require('./apis/add-remove-items/base-modules');
 const routes5 = addRemoveItems(pool);
 
-console.log(`Loading login Register...`);
+console.log(`Loading Add/Remove items...`);
 for (const [key, router] of Object.entries(routes5)) {
     app.use(`/${key}`, router);
     console.log(`* Loaded route: /${key}`);
