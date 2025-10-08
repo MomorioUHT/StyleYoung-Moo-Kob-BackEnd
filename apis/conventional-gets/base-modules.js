@@ -12,4 +12,5 @@ module.exports = (pool) => ({
     staffs: require('./get-staff')(pool),
     suppliers: require('./get-supplier')(pool),
     supplyLogs: require('./get-supply-logs')(pool),
+    recipes: require('./get-recipe')(pool)
 });

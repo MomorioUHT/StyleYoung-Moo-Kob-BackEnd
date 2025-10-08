@@ -11,6 +11,7 @@ module.exports = (pool) => {
             const product_name = req.body.product_name;
             const product_price = parseFloat(req.body.product_price);
             const product_weight = parseFloat(req.body.product_weight);
+            const product_grade = parseInt(req.body.product_grade);
 
             // Check if any duplicate product name
             const [rows] = await pool.query(`SELECT p_name FROM PRODUCT WHERE p_name = ?`, [product_name]);
@@ -25,7 +26,7 @@ module.exports = (pool) => {
             const [result] = await pool.query(`
                 INSERT INTO PRODUCT (p_id, p_name, p_price, p_grade, p_weight, p_quantity)
                 VALUES (?, ?, ?, ?, ?, ?)`,
-                [random_id, product_name, product_price, 1, product_weight, 0]
+                [random_id, product_name, product_price, product_grade, product_weight, 0]
             );
 
             res.status(201).json({ message: 'product register successfully'})

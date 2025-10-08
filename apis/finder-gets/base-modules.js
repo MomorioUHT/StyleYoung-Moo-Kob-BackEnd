@@ -1,3 +1,3 @@
 module.exports = (pool) => ({
-    getRecipe: require('./get-recipe')(pool),
+    availableRecipe: require('./get-product-for-recipe')(pool)
 });
