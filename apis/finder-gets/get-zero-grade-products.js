@@ -1,26 +1,22 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
+// Momorio's note
+// only ungraded (0) products only
+
 module.exports = (pool) => {
     const router = express.Router();
 
     router.get('/', validateApiKey, async (req, res) => {
         try {
             const [rows] = await pool.query(`
-                SELECT 
-                    s.sup_id,
-                    sup.sup_name,
-                    s.i_id,
-                    i.i_name,
-                    s.sup_quantity,
-                    s.sup_date
-                FROM SUPPLY s
-                JOIN SUPPLIER sup ON s.sup_id = sup.sup_id
-                JOIN INGREDIENT i ON s.i_id = i.i_id
+                SELECT p_id, p_name 
+                FROM PRODUCT 
+                WHERE p_grade = 0;
             `);
 
             if (rows.length === 0) {
-                return res.status(404).json({ message: 'no any supply logs found' });
+                return res.status(404).json({ message: 'no any zero grade products' });
             }
 
             res.json(rows);
