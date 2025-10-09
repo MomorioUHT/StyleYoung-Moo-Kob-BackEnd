@@ -1,6 +1,6 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
-const randomID = require('../../middleware/random-id');
+const generate = require('../../middleware/random-id');
 
 // Momorio's Note
 // Making the Production Logs and Deduct the ingredient amounts
@@ -16,7 +16,7 @@ module.exports = (pool) => {
                 return res.status(400).json({ message: 'Invalid payload structure' });
             }
             // Generate an id for that log
-            const random_id = randomID();
+            const random_id = generate();
 
             // Create Prod Log
             await pool.query(`

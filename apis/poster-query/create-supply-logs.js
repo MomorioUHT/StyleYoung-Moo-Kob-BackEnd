@@ -1,6 +1,6 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
-const randomID = require('../../middleware/random-id');
+const generate = require('../../middleware/random-id');
 
 // Momorio's note
 // This wil create supply logs using sup_id and i_id as a foreign keys
@@ -16,7 +16,7 @@ module.exports = (pool) => {
             const input_supply_quantity = parseInt(req.body.supply_quantity);
 
             // Generate an id for that log
-            const random_id = randomID();
+            const random_id = generate();
 
             const [result] = await pool.query(
                 `INSERT INTO SUPPLY (supply_id, sup_id, i_id, sup_quantity, sup_date)

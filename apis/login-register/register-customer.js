@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 
 const validateApiKey = require('../../middleware/validate-api-key');
-const randomID = require('../../middleware/random-id');
+const generate = require('../../middleware/random-id');
 
 const SALT_ROUNDS = 12;
 
@@ -27,7 +27,7 @@ module.exports = (pool) => {
             // Hash password
             const hashed_pw = await bcrypt.hash(password ,SALT_ROUNDS)
             // Generate an id for that username
-            const random_id = randomID();
+            const random_id = generate();
             
             // Save to database
             const [result] = await pool.query(`

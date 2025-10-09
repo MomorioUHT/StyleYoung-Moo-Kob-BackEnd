@@ -1,7 +1,7 @@
 const express = require('express');
 
 const validateApiKey = require('../../middleware/validate-api-key');
-const randomID = require('../../middleware/random-id');
+const generate = require('../../middleware/random-id');
 
 module.exports = (pool) => {
     const router = express.Router();
@@ -19,7 +19,7 @@ module.exports = (pool) => {
             }
 
             // Generate an id for that restaurant
-            const random_id = randomID();
+            const random_id = generate();
 
             // Save to database
             const [result] = await pool.query(`
