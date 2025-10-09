@@ -1,5 +1,6 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
+const randomID = require('../../middleware/random-id');
 
 // Momorio's note
 // This wil create supply logs using sup_id and i_id as a foreign keys
@@ -14,10 +15,13 @@ module.exports = (pool) => {
             const input_ingredient_id = req.body.ingredient_id;
             const input_supply_quantity = parseInt(req.body.supply_quantity);
 
+            // Generate an id for that log
+            const random_id = randomID();
+
             const [result] = await pool.query(
-                `INSERT INTO SUPPLY (sup_id, i_id, sup_quantity, sup_date)
-                 VALUES (?, ?, ?, NOW())`,
-                [input_supplier_id, input_ingredient_id, input_supply_quantity]
+                `INSERT INTO SUPPLY (supply_id, sup_id, i_id, sup_quantity, sup_date)
+                 VALUES (?, ?, ?, ?, NOW())`,
+                [random_id, input_supplier_id, input_ingredient_id, input_supply_quantity]
             );
 
             if (result.affectedRows === 0) {

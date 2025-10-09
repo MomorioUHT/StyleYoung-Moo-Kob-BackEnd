@@ -8,11 +8,13 @@ module.exports = (pool) => {
         try {
             const [rows] = await pool.query(`
                 SELECT 
-                    prod_id,
-                    prod_date,
-                    prod_quantity,
-                    p_id
-                FROM PROD_LOG
+                    pl.prod_id,
+                    pl.prod_date,
+                    pl.prod_quantity,
+                    pl.p_id,
+                    p.p_name
+                FROM PROD_LOG pl
+                JOIN PRODUCT p ON pl.p_id = p.p_id
             `);
 
             if (rows.length === 0) {

@@ -19,7 +19,7 @@ module.exports = (pool) => {
                 [values]
             );
 
-            res.status(201).json({ message: 'Recipe created successfully' });
+            res.status(201).json({ message: 'recipe created successfully' });
         } catch (err) {
             console.error(err);
             res.status(500).json({ message: 'Internal server error' });
