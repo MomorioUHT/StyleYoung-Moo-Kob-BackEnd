@@ -10,7 +10,7 @@ module.exports = (pool) => {
     router.get('/', validateApiKey, async (req, res) => {
         try {
             const [rows] = await pool.query(`
-                SELECT p_id, p_name 
+                SELECT p_id, p_name, p_quantity, p_weight
                 FROM PRODUCT 
                 WHERE p_grade = 0;
             `);

@@ -34,6 +34,16 @@ module.exports = (pool) => {
                 );
             }
 
+            // Update Grade 0
+            await pool.query(
+                `
+                UPDATE PRODUCT
+                SET p_quantity = p_quantity + ?
+                WHERE p_id = ?
+                `,
+                [produce_quantity, product_id]
+            )
+
             res.status(201).json({ message: 'production log create successfully' });
         } catch (err) {
             console.error(err);
