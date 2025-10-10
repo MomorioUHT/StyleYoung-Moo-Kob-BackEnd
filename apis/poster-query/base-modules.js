@@ -2,4 +2,5 @@ module.exports = (pool) => ({
     createSupplyLogs: require('./create-supply-logs')(pool),
     createProductionLogs: require('./create-prod-logs')(pool),
     createQCLogs: require('./create-qc-logs')(pool),
+    acceptProduct: require('./accept-product')(pool),
 });
