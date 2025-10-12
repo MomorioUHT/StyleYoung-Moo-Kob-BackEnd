@@ -8,4 +8,5 @@ module.exports = (pool) => ({
     customerOrderDetails: require('../poster-query/post-customer-order-detail')(pool),
     confirmTransactions: require('../poster-query/post-confirm-transactions')(pool),
     cancelTransactions: require('../poster-query/post-cancel-transactions')(pool),
+    confirmPackaging: require('../poster-query/post-confirm-packaging')(pool),
 });

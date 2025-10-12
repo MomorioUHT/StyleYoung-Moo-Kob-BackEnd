@@ -1,6 +1,6 @@
 module.exports = (pool) => ({
     customerOrderDetail: require('./get-customer-order-detail')(pool),
-    customerOrders: require('./get-customer-order')(pool),
+    allCustomerOrders: require('./get-customer-order')(pool),
     customers: require('./get-customer')(pool),
     ingredients: require('./get-ingredient')(pool),
     productsFull: require('./get-product-full')(pool),

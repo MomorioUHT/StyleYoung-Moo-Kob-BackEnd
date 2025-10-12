@@ -10,15 +10,16 @@ module.exports = (pool) => {
 
     router.post('/', validateApiKey, async (req, res) => {
         try {
-            const { customer_id, total_payment, orderDetails } = req.body;
+            const { customer_id, total_payment, transaction_code , orderDetails } = req.body;
+            console.log(req.body)
 
             const order_id = generate();
 
             await pool.query(`
                 INSERT INTO C_ORDER
-                (c_order_id, c_order_state, c_order_date, total_payment, c_id)
-                VALUES (?, ?, NOW(), ?, ?)
-            `, [order_id, 'pending_payment', total_payment, customer_id]);
+                (c_order_id, c_order_state, c_order_date, total_payment, transaction_code, c_id)
+                VALUES (?, ?, NOW(), ?, ?, ?)
+            `, [order_id, 'wait_for_check', total_payment, transaction_code, customer_id]);
 
             for (const item of orderDetails) {
                 const order_detail_id = generate();

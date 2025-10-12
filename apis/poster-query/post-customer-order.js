@@ -13,7 +13,7 @@ module.exports = (pool) => {
             const customer_id = req.body.customer_id;
 
             const [rows] = await pool.query(`
-                SELECT c_order_id, c_order_state, c_order_date, total_payment
+                SELECT c_order_id, c_order_state, c_order_date, total_payment, transaction_code
                 FROM C_ORDER
                 WHERE c_id = ?
             `, [customer_id]);
