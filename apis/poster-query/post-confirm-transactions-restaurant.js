@@ -9,34 +9,31 @@ module.exports = (pool) => {
 
     router.post('/', validateApiKey, async (req, res) => {
         try {
-            const { customer_id, order_id, order_detail } = req.body;
+            const restaurant_id = req.body.restaurant_id;
+            const restaurant_order_id = req.body.restaurant_order_id;
+            const order_quantity = req.body.order_quantity;
+            const product_id = req.body.product_id;
 
             const [rows] = await pool.query(`
-                    UPDATE C_ORDER
-                    SET c_order_state = 'wait_for_packaging'
-                    WHERE c_id = ? AND c_order_id = ?;
+                    UPDATE R_ORDER
+                    SET r_order_state = 'wait_for_packaging'
+                    WHERE r_id = ? AND r_order_id = ?;
                 `,
-                [customer_id, order_id]
+                [restaurant_id, restaurant_order_id]
             );
             
-            // Loop ตัดของออกจาก Stock
-            if (Array.isArray(order_detail)) {
-                for (const item of order_detail) {
-                    const { p_id, p_quantity } = item;
-
-                    await pool.query(
-                        `UPDATE PRODUCT 
-                        SET p_quantity = p_quantity - ?
-                        WHERE p_id = ?;`,
-                        [p_quantity, p_id]
-                    );
-                }
-            }
+            await pool.query(
+                `UPDATE PRODUCT 
+                SET p_quantity = p_quantity - ?
+                WHERE p_id = ?;`,
+                [order_quantity, product_id]
+            );
 
             if (rows.length === 0) {
                 return res.status(404).json({ message: 'failed to confirm transaction status' });
             }
 
+            console.log(rows)
             res.status(201).json({ message: 'tranactions accepted and order confirmed successfully' });
         } catch (err) {
             console.error(err);

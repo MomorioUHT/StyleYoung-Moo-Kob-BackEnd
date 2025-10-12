@@ -8,13 +8,17 @@ module.exports = (pool) => {
         try {
             const [rows] = await pool.query(`
                 SELECT 
-                    c_order_id,
-                    c_order_state,
-                    c_order_date,
-                    total_payment,
-                    c_id,
-                    transaction_code
-                FROM \`C_ORDER\`
+                    o.c_order_id,
+                    o.c_order_state,
+                    o.c_order_date,
+                    o.total_payment,
+                    o.c_id,
+                    o.transaction_code,
+                    c.c_address,
+                    c.c_firstname,
+                    c.c_lastname
+                FROM \`C_ORDER\` o
+                JOIN \`CUSTOMER\` c ON o.c_id = c.c_id
             `);
 
             if (rows.length === 0) {

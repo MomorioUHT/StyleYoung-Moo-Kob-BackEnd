@@ -17,11 +17,11 @@ module.exports = (pool) => {
                     o.s_id,
                     o.p_id,
                     r.r_name,
-                    r.r_address,
                     p.p_name
                 FROM \`R_ORDER\` o
                 JOIN \`RESTAURANT\` r ON o.r_id = r.r_id
                 JOIN \`PRODUCT\` p ON o.p_id = p.p_id
+                WHERE o.r_order_state = 'wait_for_packaging'
             `);
 
             if (rows.length === 0) {

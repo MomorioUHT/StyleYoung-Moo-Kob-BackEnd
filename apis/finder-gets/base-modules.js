@@ -4,5 +4,7 @@ module.exports = (pool) => ({
     zeroGradeProducts: require('./get-zero-grade-products')(pool),
     toBeAddedProducts: require('./get-to-be-added-qc')(pool),
     productsForSale: require('./get-product-for-sale')(pool),
-    customerOrdersWaitForPackaging: require('./get-order-for-packaging')(pool)
+    productsForRestaurant: require('./get-product-for-restaurant')(pool),
+    customerOrdersWaitForPackaging: require('./get-order-for-packaging')(pool),
+    restaurantOrdersWaitForPackaging: require('./get-order-for-packaging-restaurant')(pool)
 });

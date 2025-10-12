@@ -7,7 +7,7 @@ module.exports = (pool) => ({
     productsMini: require('./get-product-mini')(pool),
     productionLogs: require('./get-production-logs')(pool),
     qcLogs: require('./get-qc-logs')(pool),
-    restaurantOrders: require('./get-restaurant-order')(pool),
+    allRestaurantOrders: require('./get-restaurant-order')(pool),
     restaurants: require('./get-restaurant')(pool),
     staffs: require('./get-staff')(pool),
     suppliers: require('./get-supplier')(pool),

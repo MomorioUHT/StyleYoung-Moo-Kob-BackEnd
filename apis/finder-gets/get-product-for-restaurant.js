@@ -2,7 +2,7 @@ const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
 // Momorio's note
-// get product to display on the web with picture
+// get second grade products
 
 module.exports = (pool) => {
     const router = express.Router();
@@ -10,13 +10,13 @@ module.exports = (pool) => {
     router.get('/', validateApiKey, async (req, res) => {
         try {
             const [rows] = await pool.query(`
-                SELECT p_id, p_name, p_price, p_quantity, p_picture
+                SELECT p_id, p_name, p_price, p_quantity
                 FROM PRODUCT 
-                WHERE p_grade = 1;
+                WHERE p_grade = 2;
             `);
 
             if (rows.length === 0) {
-                return res.status(404).json({ message: 'no any product for sale' });
+                return res.status(404).json({ message: 'no any second grade products' });
             }
 
             // Create a URL For frontend
