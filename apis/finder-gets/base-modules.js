@@ -6,5 +6,7 @@ module.exports = (pool) => ({
     productsForSale: require('./get-product-for-sale')(pool),
     productsForRestaurant: require('./get-product-for-restaurant')(pool),
     customerOrdersWaitForPackaging: require('./get-order-for-packaging')(pool),
-    restaurantOrdersWaitForPackaging: require('./get-order-for-packaging-restaurant')(pool)
+    restaurantOrdersWaitForPackaging: require('./get-order-for-packaging-restaurant')(pool),
+    customerOrdersPendingDelivery: require('./get-order-pending-delivery')(pool),
+    restaurantOrdersPendingDelivery: require('./get-order-pending-delivery-restaurant')(pool)
 });
