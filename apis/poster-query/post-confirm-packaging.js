@@ -1,21 +1,23 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
-// Momorio's note
-// This will confirm the packaing state
-
+/**
+ * Confirm customer order packaging endpoint
+ * Updates order status to 'pending_delivery'
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = require('express').Router();
 
     router.post('/', validateApiKey, async (req, res) => {
         try {
-            const order_id = req.body.c_order_id
+            const order_id = req.body.c_order_id;
 
-            const [rows] = await pool.query(`
-                    UPDATE C_ORDER
-                    SET c_order_state = 'pending_delivery'
-                    WHERE c_order_id = ?;
-                `,
+            const [rows] = await pool.query(
+                `UPDATE C_ORDER
+                 SET c_order_state = 'pending_delivery'
+                 WHERE c_order_id = ?;`,
                 [order_id]
             );
             

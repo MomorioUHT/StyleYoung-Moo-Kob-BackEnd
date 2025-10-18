@@ -1,6 +1,12 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
+/**
+ * Accept product from QC endpoint
+ * Updates QC status to 'added' and increments target product quantity
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = express.Router();
 
@@ -10,19 +16,22 @@ module.exports = (pool) => {
             const qc_id = req.body.qc_id;
             const result_p_id = req.body.result_p_id;
 
-            console.log(req.body)
+            console.log(req.body);
+            
+            // Update QC status to 'added'
             await pool.query(
                 `UPDATE QC
-                SET qc_state = 'added'
-                WHERE qc_id = ?;
-                `, [qc_id]
+                 SET qc_state = 'added'
+                 WHERE qc_id = ?;`,
+                [qc_id]
             );
 
+            // Add quantity to target product
             await pool.query(
                 `UPDATE PRODUCT
-                SET p_quantity = p_quantity + ?
-                WHERE p_id = ?;
-                `, [quantity, result_p_id]
+                 SET p_quantity = p_quantity + ?
+                 WHERE p_id = ?;`,
+                [quantity, result_p_id]
             );
 
             res.json({ message: 'product accepted successfully' });

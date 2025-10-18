@@ -1,8 +1,13 @@
 const express = require('express');
-
 const validateApiKey = require('../../middleware/validate-api-key');
 const generate = require('../../middleware/random-id');
 
+/**
+ * Register supplier endpoint
+ * Creates a new supplier entry in the database with validation for duplicates
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = express.Router();
 
@@ -12,23 +17,27 @@ module.exports = (pool) => {
             const supplier_tel = req.body.supplier_tel;
             const supplier_address = req.body.supplier_address;
 
-            // Check if any duplicate supplier name
-            const [rows] = await pool.query(`SELECT sup_name FROM SUPPLIER WHERE sup_name = ?`, [supplier_name]);
+            // Check if supplier name already exists in database
+            const [rows] = await pool.query(
+                `SELECT sup_name FROM SUPPLIER WHERE sup_name = ?`, 
+                [supplier_name]
+            );
+            
             if (rows.length > 0) {
-                return res.status(409).json({ message: 'this supplier already exists'})
+                return res.status(409).json({ message: 'this supplier already exists' });
             }
 
-            // Generate an id for that supplier
+            // Generate unique ID for the new supplier
             const random_id = generate();
 
-            // Save to database
-            const [result] = await pool.query(`
-                INSERT INTO SUPPLIER (sup_id, sup_name, sup_tel, sup_address)
-                VALUES (?, ?, ?, ?)`,
+            // Insert new supplier into database
+            const [result] = await pool.query(
+                `INSERT INTO SUPPLIER (sup_id, sup_name, sup_tel, sup_address)
+                 VALUES (?, ?, ?, ?)`,
                 [random_id, supplier_name, supplier_tel, supplier_address]
             );
 
-            res.status(201).json({ message: 'supplier register successfully'})
+            res.status(201).json({ message: 'supplier register successfully' });
 
         } catch (err) {
             console.error(err);

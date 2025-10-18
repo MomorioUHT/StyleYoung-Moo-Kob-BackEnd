@@ -1,9 +1,12 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
-// Momorio's note
-// This is from the confirm button 'pending_payment' -> 'cancelled'
-
+/**
+ * Cancel customer transaction endpoint
+ * Updates order status from 'pending_payment' to 'cancelled'
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = require('express').Router();
 
@@ -12,11 +15,10 @@ module.exports = (pool) => {
             const customer_id = req.body.customer_id;
             const current_order_id = req.body.order_id;
 
-            const [rows] = await pool.query(`
-                    UPDATE C_ORDER
-                    SET c_order_state = 'cancelled'
-                    WHERE c_id = ? AND c_order_id = ?;
-                `,
+            const [rows] = await pool.query(
+                `UPDATE C_ORDER
+                 SET c_order_state = 'cancelled'
+                 WHERE c_id = ? AND c_order_id = ?;`,
                 [customer_id, current_order_id]
             );
 

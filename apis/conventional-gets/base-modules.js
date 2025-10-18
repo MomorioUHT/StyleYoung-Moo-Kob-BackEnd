@@ -1,3 +1,9 @@
+/**
+ * Base module for conventional GET operations
+ * Exports all standard data retrieval endpoints
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Object containing all GET route handlers
+ */
 module.exports = (pool) => ({
     customerOrderDetail: require('./get-customer-order-detail')(pool),
     allCustomerOrders: require('./get-customer-order')(pool),

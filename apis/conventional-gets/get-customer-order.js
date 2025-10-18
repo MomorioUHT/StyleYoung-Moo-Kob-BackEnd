@@ -1,6 +1,12 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
+/**
+ * Get all customer orders endpoint
+ * Retrieves customer orders joined with customer information
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = express.Router();
 

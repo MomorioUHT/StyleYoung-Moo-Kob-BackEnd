@@ -2,15 +2,18 @@ require('dotenv').config();
 
 const express = require('express');
 const mysql = require('mysql2/promise');
-const app = express();
 const path = require('path');
+const cors = require('cors');
+
+const app = express();
 const PORT = process.env.PORT;
 
-const cors = require('cors');
+// Middleware configuration
 app.use(cors());
 app.use(express.json());
 app.use('/uploads/products', express.static(path.join(__dirname, 'uploads/products')));
 
+// Database connection pool configuration
 const pool = mysql.createPool({
     host: process.env.HOST,
     user: process.env.MYSQL_USER,
@@ -21,6 +24,10 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
+/**
+ * Test database connection on startup
+ * Exits the process if connection fails
+ */
 (async () => {
     try {
         const connection = await pool.getConnection();
@@ -32,61 +39,39 @@ const pool = mysql.createPool({
     }
 })();
 
-// Conventional Gets
+/**
+ * Load and register route modules
+ * @param {Object} routeModule - The module containing routes
+ * @param {string} moduleName - Name of the module for logging
+ */
+function loadRoutes(routeModule, moduleName) {
+    const routes = routeModule(pool);
+    
+    console.log(`Loading ${moduleName}...`);
+    for (const [key, router] of Object.entries(routes)) {
+        app.use(`/${key}`, router);
+        console.log(`* Loaded route: /${key}`);
+    }
+    console.log('==========');
+}
+
+// Load all API route modules
 const conventionalGets = require('./apis/conventional-gets/base-modules');
-const routes = conventionalGets(pool);
+loadRoutes(conventionalGets, 'Conventional Gets');
 
-console.log(`Loading Conventional Gets...`);
-for (const [key, router] of Object.entries(routes)) {
-    app.use(`/${key}`, router);
-    console.log(`* Loaded route: /${key}`);
-}
-
-// Finder Gets
-console.log("==========")
 const finderGets = require('./apis/finder-gets/base-modules');
-const routes2 = finderGets(pool);
+loadRoutes(finderGets, 'Finder Gets');
 
-console.log(`Loading Finder Gets...`);
-for (const [key, router] of Object.entries(routes2)) {
-    app.use(`/${key}`, router);
-    console.log(`* Loaded route: /${key}`);
-}
-
-// Poster Query
-console.log("==========")
 const posterQuery = require('./apis/poster-query/base-modules');
-const routes3 = posterQuery(pool);
+loadRoutes(posterQuery, 'Poster Query');
 
-console.log(`Loading Poster Query...`);
-for (const [key, router] of Object.entries(routes3)) {
-    app.use(`/${key}`, router);
-    console.log(`* Loaded route: /${key}`);
-}
-
-// Login & Register
-console.log("==========")
 const loginRegister = require('./apis/login-register/base-modules');
-const routes4 = loginRegister(pool);
+loadRoutes(loginRegister, 'Login Register');
 
-console.log(`Loading login Register...`);
-for (const [key, router] of Object.entries(routes4)) {
-    app.use(`/${key}`, router);
-    console.log(`* Loaded route: /${key}`);
-}
-
-// add-remove items
-console.log("==========")
 const addRemoveItems = require('./apis/add-remove-items/base-modules');
-const routes5 = addRemoveItems(pool);
+loadRoutes(addRemoveItems, 'Add/Remove Items');
 
-console.log(`Loading Add/Remove items...`);
-for (const [key, router] of Object.entries(routes5)) {
-    app.use(`/${key}`, router);
-    console.log(`* Loaded route: /${key}`);
-}
-
-console.log("==========")
+// Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

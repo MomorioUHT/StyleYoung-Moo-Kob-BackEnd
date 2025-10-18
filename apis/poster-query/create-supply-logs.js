@@ -2,10 +2,13 @@ const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 const generate = require('../../middleware/random-id');
 
-// Momorio's note
-// This wil create supply logs using sup_id and i_id as a foreign keys
-// WARNING!: This will also updates the ingredients table! Careful EIEI
-
+/**
+ * Create supply logs endpoint
+ * Records ingredient supply and updates ingredient inventory
+ * WARNING: This endpoint modifies the ingredient amounts
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = express.Router();
 
@@ -15,9 +18,10 @@ module.exports = (pool) => {
             const input_ingredient_id = req.body.ingredient_id;
             const input_supply_quantity = parseInt(req.body.supply_quantity);
 
-            // Generate an id for that log
+            // Generate unique ID for supply log
             const random_id = generate();
 
+            // Insert supply log record
             const [result] = await pool.query(
                 `INSERT INTO SUPPLY (supply_id, sup_id, i_id, sup_quantity, sup_date)
                  VALUES (?, ?, ?, ?, NOW())`,
@@ -28,11 +32,11 @@ module.exports = (pool) => {
                 return res.status(400).json({ message: 'failed to create supply logs' });
             }
 
-            // Update existing INGREDIENT
-            await pool.query(`
-                UPDATE INGREDIENT
-                SET i_amount = i_amount + ?
-                WHERE i_id = ?;`,
+            // Update ingredient inventory with new supply
+            await pool.query(
+                `UPDATE INGREDIENT
+                 SET i_amount = i_amount + ?
+                 WHERE i_id = ?;`,
                 [input_supply_quantity, input_ingredient_id]
             );
 

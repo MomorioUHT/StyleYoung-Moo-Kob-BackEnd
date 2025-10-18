@@ -1,9 +1,12 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
-// Momorio's note
-// only ungraded (0) and non-existant in RECIPE of products will return
-
+/**
+ * Get products pending QC addition endpoint
+ * Retrieves QC entries with 'to_be_added' status joined with product details
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = express.Router();
 

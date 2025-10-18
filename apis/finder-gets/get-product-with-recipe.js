@@ -1,9 +1,12 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
-// Momorio's note
-// only ungraded (0) and non-existant in RECIPE of products will return
-
+/**
+ * Get products with existing recipes endpoint
+ * Retrieves ungraded (grade 0) products that have recipes defined
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = express.Router();
 

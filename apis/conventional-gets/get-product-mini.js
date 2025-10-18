@@ -1,9 +1,12 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
-// Momorio's note
-// Mini version does not get the 'p_grade' and 'p_price' field
-
+/**
+ * Get all products (minimal info) endpoint
+ * Retrieves basic product information excluding price and grade
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = express.Router();
 

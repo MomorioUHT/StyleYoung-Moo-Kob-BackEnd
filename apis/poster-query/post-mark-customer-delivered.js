@@ -1,9 +1,12 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
-// Momorio's note
-// This will confirm and cut stock
-
+/**
+ * Mark customer order as delivered endpoint
+ * Updates order status to 'completed'
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = require('express').Router();
 
@@ -11,11 +14,10 @@ module.exports = (pool) => {
         try {
             const order_id = req.body.order_id;
 
-            const [rows] = await pool.query(`
-                    UPDATE C_ORDER
-                    SET c_order_state = 'completed'
-                    WHERE c_order_id = ?;
-                `,
+            const [rows] = await pool.query(
+                `UPDATE C_ORDER
+                 SET c_order_state = 'completed'
+                 WHERE c_order_id = ?;`,
                 [order_id]
             );
 

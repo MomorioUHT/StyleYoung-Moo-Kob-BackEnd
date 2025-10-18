@@ -1,9 +1,12 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
-// Momorio's note
-// This will confirm and cut stock
-
+/**
+ * Confirm customer transaction endpoint
+ * Updates order status to 'wait_for_packaging' and deducts products from stock
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = require('express').Router();
 
@@ -11,23 +14,23 @@ module.exports = (pool) => {
         try {
             const { customer_id, order_id, order_detail } = req.body;
 
-            const [rows] = await pool.query(`
-                    UPDATE C_ORDER
-                    SET c_order_state = 'wait_for_packaging'
-                    WHERE c_id = ? AND c_order_id = ?;
-                `,
+            // Update order status to waiting for packaging
+            const [rows] = await pool.query(
+                `UPDATE C_ORDER
+                 SET c_order_state = 'wait_for_packaging'
+                 WHERE c_id = ? AND c_order_id = ?;`,
                 [customer_id, order_id]
             );
             
-            // Loop ตัดของออกจาก Stock
+            // Deduct ordered products from inventory
             if (Array.isArray(order_detail)) {
                 for (const item of order_detail) {
                     const { p_id, p_quantity } = item;
 
                     await pool.query(
                         `UPDATE PRODUCT 
-                        SET p_quantity = p_quantity - ?
-                        WHERE p_id = ?;`,
+                         SET p_quantity = p_quantity - ?
+                         WHERE p_id = ?;`,
                         [p_quantity, p_id]
                     );
                 }

@@ -1,10 +1,12 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
-// Momorio's note
-// this will return the customer's product detail based on the selected c_order_id
-// This is POST
-
+/**
+ * Get customer order details by order ID endpoint (POST method)
+ * Retrieves order details with product information for a specific order
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = require('express').Router();
 
@@ -13,18 +15,16 @@ module.exports = (pool) => {
             const current_order_id = req.body.order_id;
 
             const [rows] = await pool.query(
-                `
-                SELECT 
+                `SELECT 
                     od.order_detail_id,
                     od.quantity,
                     od.sub_total,
                     od.c_order_id,
                     od.p_id,
                     p.p_name
-                FROM ORDER_DETAIL od
-                JOIN PRODUCT p ON od.p_id = p.p_id
-                WHERE od.c_order_id = ?
-                `,
+                 FROM ORDER_DETAIL od
+                 JOIN PRODUCT p ON od.p_id = p.p_id
+                 WHERE od.c_order_id = ?`,
                 [current_order_id]
             );
 

@@ -1,9 +1,12 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
-// Momorio's note
-// get second grade products
-
+/**
+ * Get products for restaurant orders endpoint
+ * Retrieves grade 2 products with image URLs for restaurant sales
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = express.Router();
 
@@ -19,9 +22,9 @@ module.exports = (pool) => {
                 return res.status(404).json({ message: 'no any second grade products' });
             }
 
-            // Create a URL For frontend
-            const host = req.get('host'); // Get the host base URL
-            const protocol = req.protocol; // http or https
+            // Construct full image URLs for frontend consumption
+            const host = req.get('host');
+            const protocol = req.protocol;
             const productsWithUrl = rows.map(p => ({
                 ...p,
                 picture_url: p.p_picture ? `${protocol}://${host}/uploads/products/${p.p_picture}` : null

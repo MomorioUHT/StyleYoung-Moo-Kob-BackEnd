@@ -1,9 +1,12 @@
 const express = require('express');
 const validateApiKey = require('../../middleware/validate-api-key');
 
-// Momorio's note
-// This will not get the 'password' and 'token' field
-
+/**
+ * Get all customers endpoint
+ * Retrieves customer data excluding sensitive fields (password, token)
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = express.Router();
 

@@ -1,3 +1,9 @@
+/**
+ * Base module for finder/filter GET operations
+ * Exports filtered data retrieval endpoints based on specific conditions
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Object containing all filtered GET route handlers
+ */
 module.exports = (pool) => ({
     availableRecipe: require('./get-product-for-recipe')(pool),
     productsWithRecipe: require('./get-product-with-recipe')(pool),

@@ -1,3 +1,9 @@
+/**
+ * Base module for POST/UPDATE operations
+ * Exports all endpoints that create or modify data
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Object containing all POST/UPDATE route handlers
+ */
 module.exports = (pool) => ({
     createSupplyLogs: require('./create-supply-logs')(pool),
     createProductionLogs: require('./create-prod-logs')(pool),

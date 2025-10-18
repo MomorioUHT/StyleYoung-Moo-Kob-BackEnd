@@ -1,11 +1,16 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-
 const validateApiKey = require('../../middleware/validate-api-key');
 const generate = require('../../middleware/random-id');
 
 const SALT_ROUNDS = 12;
 
+/**
+ * Customer registration endpoint
+ * Creates a new customer account with hashed password
+ * @param {Object} pool - MySQL connection pool
+ * @returns {Object} Express router
+ */
 module.exports = (pool) => {
     const router = express.Router();
 
@@ -18,25 +23,30 @@ module.exports = (pool) => {
             const username = req.body.username;
             const password = req.body.password;
 
-            // Check if any duplicates username
-            const [rows] = await pool.query(`SELECT c_username FROM CUSTOMER WHERE c_username = ?`, [username]);
+            // Check for duplicate username
+            const [rows] = await pool.query(
+                `SELECT c_username FROM CUSTOMER WHERE c_username = ?`, 
+                [username]
+            );
+            
             if (rows.length > 0) {
-                return res.status(409).json({ message: 'this username already exists'})
+                return res.status(409).json({ message: 'this username already exists' });
             }
 
-            // Hash password
-            const hashed_pw = await bcrypt.hash(password ,SALT_ROUNDS)
-            // Generate an id for that username
+            // Hash password using bcrypt
+            const hashed_pw = await bcrypt.hash(password, SALT_ROUNDS);
+            
+            // Generate unique ID for new customer
             const random_id = generate();
             
-            // Save to database
-            const [result] = await pool.query(`
-                INSERT INTO CUSTOMER (c_id, c_firstname, c_lastname, c_tel, c_address, c_username, c_password, c_token, c_lastlogin)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            // Insert new customer record into database
+            const [result] = await pool.query(
+                `INSERT INTO CUSTOMER (c_id, c_firstname, c_lastname, c_tel, c_address, c_username, c_password, c_token, c_lastlogin)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [random_id, firstname, lastname, phone, address, username, hashed_pw, null, null]
             );
 
-            res.status(201).json({ message: 'customer account created successfully'})
+            res.status(201).json({ message: 'customer account created successfully' });
 
         } catch (err) {
             console.error(err);
