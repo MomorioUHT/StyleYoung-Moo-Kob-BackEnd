@@ -20,7 +20,8 @@ module.exports = (pool) => {
                     o.total_payment,
                     o.c_id,
                     c.c_firstname,
-                    c.c_lastname
+                    c.c_lastname,
+                    c.c_address
                 FROM C_ORDER o
                 JOIN CUSTOMER c ON o.c_id = c.c_id
                 WHERE o.c_order_state = 'wait_for_packaging'
